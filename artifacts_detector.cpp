@@ -28,7 +28,7 @@ void artifacts_detector::show(const std::string& window_name, const cv::Mat& img
     cv::waitKey(1);
 }
 
-void artifacts_detector::detect_artifacts(const cv::Mat& image) {
+size_t artifacts_detector::detect_artifacts(const cv::Mat &image) {
     cv::Mat processed = this->cluster(image, 2);
     cv::cvtColor(processed, processed, CV_BGR2GRAY);
     if(m_debug) this->show("gray", processed);
@@ -46,10 +46,10 @@ void artifacts_detector::detect_artifacts(const cv::Mat& image) {
     processed.convertTo(processed, CV_8UC1);
     std::vector<std::vector<cv::Point>> countours;
     cv::findContours(processed, countours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-    for(size_t i = 0; i < countours.size(); ++i) {
-        double p = cv::arcLength(countours[i], true);
-        cv::approxPolyDP(countours[i], countours[i], 0.1 * p, true);
-    }
+//    for(size_t i = 0; i < countours.size(); ++i) {
+//        double p = cv::arcLength(countours[i], true);
+//        cv::approxPolyDP(countours[i], countours[i], 0.1 * p, true);
+//    }
     if(m_debug) {
         cv::Mat c_img;
         image.copyTo(c_img);
@@ -58,6 +58,7 @@ void artifacts_detector::detect_artifacts(const cv::Mat& image) {
         cv::drawContours(c_img, countours, -1, color, 2);
         this->show("found", c_img);
     }
+    return countours.size();
 }
 
 cv::Mat artifacts_detector::cluster(const cv::Mat &image, size_t cluster_count) {

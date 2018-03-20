@@ -77,13 +77,22 @@ cv::Mat rect_detector::detect_screen(const cv::Mat &image) {
     if(aprox_countor.size() == 4) {
         cv::Point2f src_vertices[4];
         cv::Point2f dst_vertices[4];
-//        for(size_t i = 0; i < 4; ++i) {
-//            src_vertices[i] = aprox_countor[i];
-//        }
-        src_vertices[0] = aprox_countor[0];
-        src_vertices[1] = aprox_countor[3];
-        src_vertices[2] = aprox_countor[1];
-        src_vertices[3] = aprox_countor[2];
+        std::sort(aprox_countor.begin(), aprox_countor.end(), [](auto&& p1, auto&& p2){
+            return p1.y < p2.y;
+        });
+        if(aprox_countor[0].x > aprox_countor[1].x) {
+            std::swap(aprox_countor[0], aprox_countor[1]);
+        }
+        if(aprox_countor[2].x > aprox_countor[3].x) {
+            std::swap(aprox_countor[2], aprox_countor[3]);
+        }
+        for(size_t i = 0; i < 4; ++i) {
+            src_vertices[i] = aprox_countor[i];
+        }
+//        src_vertices[0] = aprox_countor[0];
+//        src_vertices[1] = aprox_countor[3];
+//        src_vertices[2] = aprox_countor[1];
+//        src_vertices[3] = aprox_countor[2];
         dst_vertices[0] = cv::Point(0, 0);
         dst_vertices[1] = cv::Point(tv.width - 1, 0);
         dst_vertices[2] = cv::Point(0, tv.height - 1);

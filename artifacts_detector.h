@@ -14,7 +14,7 @@ public:
 
     void disable_debug();
 
-    void detect_artifacts(const cv::Mat& image);
+    size_t detect_artifacts(const cv::Mat &image);
 
 
 private:
