@@ -8,7 +8,7 @@ int main() {
     rect_detector detector;
     artifacts_detector artifacts_detector1;
     cv::namedWindow("original");
-    cv::Mat img = cv::imread("/home/tekatod/Pictures/IMG_1104.JPG");
+    cv::Mat img = cv::imread("/home/tekatod/develop/cv_tv_tests/some_test/TV_TEST_2.jpg");
     cv::imshow("original", img);
     cv::waitKey(1);
     artifacts_detector1.enable_debug();

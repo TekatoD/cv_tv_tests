@@ -6,22 +6,16 @@
 
 
 #include <opencv2/core/types.hpp>
+#include "base_detector.h"
 
-class rect_detector {
+class rect_detector : public base_detector {
 public:
     rect_detector() = default;
 
     cv::Mat detect_screen(const cv::Mat &image);
 
-    void enable_debug();
-
-    void disable_debug();
+    void enable_debug() override ;
 
 private:
     std::vector<std::vector<cv::Point>> find_contours(const cv::Mat &image);
-
-    void show(const std::string& window_name, const cv::Mat& img);
-
-private:
-    bool m_debug{false};
 };

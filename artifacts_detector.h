@@ -5,25 +5,13 @@
 #pragma once
 
 #include <opencv2/core/mat.hpp>
+#include "base_detector.h"
 
-class artifacts_detector {
+class artifacts_detector : public base_detector {
 public:
     artifacts_detector() = default;
 
-    void enable_debug();
-
-    void disable_debug();
+    void enable_debug() override ;
 
     size_t detect_artifacts(const cv::Mat &image);
-
-
-private:
-
-    void show(const std::string& window_name, const cv::Mat& img);
-
-    cv::Mat cluster(const cv::Mat &image, size_t cluster_count);
-
-private:
-
-    bool m_debug{false};
 };

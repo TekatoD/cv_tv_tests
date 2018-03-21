@@ -4,13 +4,7 @@
 
 #include <cv.hpp>
 #include "artifacts_detector.h"
-
-void artifacts_detector::disable_debug() {
-    if(m_debug) {
-        m_debug = false;
-        cv::destroyAllWindows();
-    }
-}
+#include "cv_tools.h"
 
 void artifacts_detector::enable_debug() {
     if(!m_debug) {
@@ -23,13 +17,9 @@ void artifacts_detector::enable_debug() {
     }
 }
 
-void artifacts_detector::show(const std::string& window_name, const cv::Mat& img) {
-    cv::imshow(window_name, img);
-    cv::waitKey(1);
-}
 
 size_t artifacts_detector::detect_artifacts(const cv::Mat &image) {
-    cv::Mat processed = this->cluster(image, 2);
+    cv::Mat processed = cv_tv::cluster(image, 2);
     cv::cvtColor(processed, processed, CV_BGR2GRAY);
     if(m_debug) this->show("gray", processed);
     cv::GaussianBlur(processed, processed, cv::Size{15, 15}, 0);
@@ -59,33 +49,4 @@ size_t artifacts_detector::detect_artifacts(const cv::Mat &image) {
         this->show("found", c_img);
     }
     return countours.size();
-}
-
-cv::Mat artifacts_detector::cluster(const cv::Mat &image, size_t cluster_count) {
-    cv::Mat samples(image.rows * image.cols, 3, CV_32F);
-    for( int y = 0; y < image.rows; y++ ) {
-        for (int x = 0; x < image.cols; x++) {
-            for (int z = 0; z < 3; z++) {
-                samples.at<float>(y + x * image.rows, z) = image.at<cv::Vec3b>(y, x)[z];
-            }
-        }
-    }
-
-
-    cv::Mat labels;
-    int attempts = 5;
-    cv::Mat centers;
-    kmeans(samples, cluster_count, labels, cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001), attempts,
-           cv::KMEANS_PP_CENTERS, centers );
-
-    cv::Mat new_image( image.size(), image.type() );
-    for( int y = 0; y < image.rows; y++ )
-        for( int x = 0; x < image.cols; x++ )
-        {
-            int cluster_idx = labels.at<int>(y + x*image.rows,0);
-            new_image.at<cv::Vec3b>(y,x)[0] = centers.at<float>(cluster_idx, 0);
-            new_image.at<cv::Vec3b>(y,x)[1] = centers.at<float>(cluster_idx, 1);
-            new_image.at<cv::Vec3b>(y,x)[2] = centers.at<float>(cluster_idx, 2);
-        }
-    return std::move(new_image);
 }

@@ -35,13 +35,6 @@ std::vector<std::vector<cv::Point>> rect_detector::find_contours(const cv::Mat& 
     return std::move(countours);
 }
 
-void rect_detector::disable_debug() {
-    if(m_debug) {
-        m_debug = false;
-        cv::destroyAllWindows();
-    }
-}
-
 void rect_detector::enable_debug() {
     if(!m_debug) {
         m_debug = true;
@@ -53,10 +46,6 @@ void rect_detector::enable_debug() {
     }
 }
 
-void rect_detector::show(const std::string& window_name, const cv::Mat& img) {
-    cv::imshow(window_name, img);
-    cv::waitKey(1);
-}
 
 cv::Mat rect_detector::detect_screen(const cv::Mat &image) {
     auto countours = this->find_contours(image);
