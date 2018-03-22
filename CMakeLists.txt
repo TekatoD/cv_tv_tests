@@ -15,6 +15,8 @@ add_executable(cv_exp main.cpp
         base_detector.h
         mura_detector.cpp
         mura_detector.h
-        cv_tools.cpp curve_detector.cpp curve_detector.h)
+        cv_tools.cpp
+        curve_detector.cpp
+        curve_detector.h)
 
 target_link_libraries(cv_exp ${OpenCV_LIBRARIES})

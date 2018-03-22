@@ -32,7 +32,7 @@ size_t artifacts_detector::detect_artifacts(const cv::Mat &image) {
     cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
     cv::morphologyEx(processed, processed, cv::MORPH_CLOSE, element);
     if(m_debug) this->show("morphology", processed);
-    cv::threshold(processed, processed, 45, 255, CV_THRESH_BINARY);
+    cv::threshold(processed, processed, 10, 255, CV_THRESH_BINARY);
     processed.convertTo(processed, CV_8UC1);
     std::vector<std::vector<cv::Point>> countours;
     cv::findContours(processed, countours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
@@ -44,7 +44,7 @@ size_t artifacts_detector::detect_artifacts(const cv::Mat &image) {
         cv::Mat c_img;
         image.copyTo(c_img);
         c_img.convertTo(c_img, CV_8UC3);
-        cv::Scalar color(0, 0, 255);
+        cv::Scalar color(0, 255, 0);
         cv::drawContours(c_img, countours, -1, color, 2);
         this->show("found", c_img);
     }
